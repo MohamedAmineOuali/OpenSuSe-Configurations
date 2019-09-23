@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+if [ "start" == "$1" ]; then
+    tee /proc/acpi/bbswitch <<<ON && modprobe nvidia_uvm && echo "GPU is ON"
+elif [ "stop" == "$1" ]; then
+    rmmod nvidia_drm nvidia_modeset nvidia_uvm nvidia && tee /proc/acpi/bbswitch <<<OFF && echo "GPU is OFF"
+else
+echo "Wrong Argument"
+fi
